@@ -1,0 +1,11 @@
+username = '+12128675309'
+# optional, defaults to INFO
+#log_level = 
+# signald socket path. optional, defaults to /var/run/signald/signald.sock
+#socket_path = 
+
+[database]
+# all fields are optional
+# see https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.connection.connect
+# for possible fields
+database = 'cc_signal'

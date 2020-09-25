@@ -1,1 +1,6 @@
+# attr is a dep of semaphore, yet we still have to specify it for some reason
+attr==0.3.1
 semaphore
+syncpg
+jinja2
+toml
