@@ -1,6 +1,4 @@
-# attr is a dep of semaphore, yet we still have to specify it for some reason
-attr==0.3.1
-git+https://github.com/lwesterhof/semaphore
+git+https://github.com/iomintz/semaphore.git@fork
 syncpg
 jinja2
 toml
