@@ -1,4 +1,4 @@
-git+https://github.com/iomintz/semaphore.git@fork
+semaphore-bot @ git+https://github.com/lwesterhof/semaphore.git@main
 syncpg
 jinja2
 toml
