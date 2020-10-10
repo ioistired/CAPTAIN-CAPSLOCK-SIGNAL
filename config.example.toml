@@ -4,6 +4,10 @@ username = '+12128675309'
 # signald socket path. optional, defaults to /var/run/signald/signald.sock
 #socket_path = 
 
+# how likely the bot is to respond with a random shout (shouts will always be logged regardless of this value)
+# defaults to 0.4 ie 40%
+shout_response_probability = 0.4
+
 [database]
 # all fields are optional
 # see https://magicstack.github.io/asyncpg/current/api/index.html#asyncpg.connection.connect

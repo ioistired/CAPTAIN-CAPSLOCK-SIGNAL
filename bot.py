@@ -59,7 +59,7 @@ def shout(ctx: ChatContext):
 #			return
 
 	# try to reduce spam
-	if random() < 1:
+	if random() < config.get('shout_response_probability', 0.4):
 		shout = bot.db.random_shout(group_id)
 		msg.mark_read()
 		msg.reply(shout or "I AIN'T GOT NOTHIN' ON THAT")
