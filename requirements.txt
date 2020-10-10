@@ -1,4 +1,4 @@
-semaphore-bot @ git+https://github.com/lwesterhof/semaphore.git@main
-syncpg
-jinja2
-toml
+semaphore-bot>=0.7.1
+syncpg>=1.1.1,<2.0.0
+jinja2>=2.11.2,<3.0.0
+toml>=0.10.1,<0.11.0

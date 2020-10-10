@@ -34,13 +34,7 @@ bot = Bot(config['username'])
 bot.config = config
 logger = logging.getLogger(__name__)
 
-def handler(pattern=''):
-	def deco(func):
-		bot.register_handler(pattern, func)
-		return func
-	return deco
-
-@handler()
+@bot.handler()
 def shout(ctx: ChatContext):
 	msg = ctx.message
 
@@ -50,7 +44,6 @@ def shout(ctx: ChatContext):
 	group_id = msg.get_group_id()
 	if not group_id:
 		# this bot doesn't work in DMs but that doesn't mean we can't have a bit of fun
-		msg.mark_read()
 		msg.reply('KEEP YOUR VOICE DOWN')
 		return
 
@@ -61,7 +54,6 @@ def shout(ctx: ChatContext):
 	# try to reduce spam
 	if random() < config.get('shout_response_probability', 0.4):
 		shout = bot.db.random_shout(group_id)
-		msg.mark_read()
 		msg.reply(shout or "I AIN'T GOT NOTHIN' ON THAT")
 
 	bot.db.save_shout(msg)
