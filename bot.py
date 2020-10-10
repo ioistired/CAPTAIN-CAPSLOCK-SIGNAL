@@ -34,7 +34,7 @@ bot = Bot(config['username'])
 bot.config = config
 logger = logging.getLogger(__name__)
 
-@bot.handler()
+@bot.handler('')
 def shout(ctx: ChatContext):
 	msg = ctx.message
 
