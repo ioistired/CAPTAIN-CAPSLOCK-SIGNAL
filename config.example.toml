@@ -1,6 +1,6 @@
 username = '+12128675309'
-# optional, defaults to INFO
-#log_level = 
+# optional, defaults to 'INFO'
+log_level = 'DEBUG'
 # signald socket path. optional, defaults to /var/run/signald/signald.sock
 #socket_path = 
 

@@ -19,23 +19,15 @@ import base64
 import logging
 from random import random
 
-import syncpg
+import anyio
+import asyncpg
 from semaphore import Bot, ChatContext
 import toml
 
 import utils.shout
 from db import Database
 
-with open('config.toml') as f:
-	config = toml.load(f)
-
-import logging
-bot = Bot(config['username'])
-bot.config = config
-logger = logging.getLogger(__name__)
-
-@bot.handler('')
-def shout(ctx: ChatContext):
+async def shout(ctx: ChatContext):
 	msg = ctx.message
 
 	if not utils.shout.is_shout(msg.get_body()):
@@ -44,23 +36,36 @@ def shout(ctx: ChatContext):
 	group_id = msg.get_group_id()
 	if not group_id:
 		# this bot doesn't work in DMs but that doesn't mean we can't have a bit of fun
-		msg.reply('KEEP YOUR VOICE DOWN')
+		await msg.reply('KEEP YOUR VOICE DOWN')
 		return
 
-#		if not bot.db.state(group_id, msg.source):
-#			print(2)
-#			return
-
 	# try to reduce spam
-	if random() < config.get('shout_response_probability', 0.4):
-		shout = bot.db.random_shout(group_id)
-		msg.reply(shout or "I AIN'T GOT NOTHIN' ON THAT")
+	if random() < ctx.bot.config.get('shout_response_probability', 0.4):
+		shout = await ctx.bot.db.random_shout(group_id)
+		await msg.reply(shout or "I AIN'T GOT NOTHIN' ON THAT")
 
-	bot.db.save_shout(msg)
+	await ctx.bot.db.save_shout(msg)
 
-def main():
-	bot.db = Database(syncpg.connect(**bot.config['database']))
-	bot.start()
+async def main():
+	with open('config.toml') as f:
+		config = toml.load(f)
+
+	import logging
+	# shockingly, this is really how the docs want you doing it
+	log_level = getattr(logging, config.get('log_level', 'INFO').upper(), None)
+	if not isinstance(log_level, int):
+		import sys
+		logging.basicConfig(level=logging.ERROR)
+		logging.error('Invalid log level %s specified!', log_level)
+		sys.exit(1)
+	else:
+		logging.basicConfig(level=log_level)
+
+	async with Bot(config['username'], socket_path=config.get('signald_socket_path', '/var/run/signald/signald.sock')) as bot:
+		bot.register_handler('', shout)
+		bot.config = config
+		bot.db = Database(await asyncpg.create_pool(**bot.config['database']))
+		await bot.start()
 
 if __name__ == '__main__':
-	main()
+	anyio.run(main)
