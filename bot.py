@@ -18,6 +18,7 @@
 import base64
 import logging
 from random import random
+from pathlib import Path
 
 import anyio
 import asyncpg
@@ -61,7 +62,12 @@ async def main():
 	else:
 		logging.basicConfig(level=log_level)
 
-	async with Bot(config['username'], socket_path=config.get('signald_socket_path', '/var/run/signald/signald.sock')) as bot:
+	async with Bot(
+		config['username'],
+		socket_path=config.get('signald_socket_path', '/var/run/signald/signald.sock'),
+		profile_name='CAPTAIN CAPSLOCK',
+		profile_picture=str((Path(__file__).parent / 'profile-pic.png').absolute()),
+	) as bot:
 		bot.register_handler('', shout)
 		bot.config = config
 		bot.db = Database(await asyncpg.create_pool(**bot.config['database']))

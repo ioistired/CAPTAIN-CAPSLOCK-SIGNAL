@@ -1,4 +1,4 @@
-semaphore-bot @ git+https://github.com/lwesterhof/semaphore.git
-asyncpg ~= 0.21
+semaphore-bot ~= 0.10.0
+asyncpg ~= 0.21.0
 jinja2 ~= 2.0
-toml ~= 0.10
+toml ~= 0.10.0
